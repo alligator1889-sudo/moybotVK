@@ -4,8 +4,8 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.exceptions import ApiError
 
-VK_TOKEN = os.getenv("VK_TOKEN")
-VK_GROUP_ID = os.getenv("VK_GROUP_ID")
+VK_TOKEN = vk1.a.molFXoJyMSbD1tkDw_Ft_gJzK4pDRHjqBuXzWtQTZQuqwKp2d8JCRbxTAk5YdRLOX13EPfUGR4-oW6JtxM_q2I9LQpYL8jVsNDfF6WeHyNGGT10Mjhvqb67wYGeY6G-ZseXEnjwoaL6GkfKYTcNMEgR2avRSr5eaKUO_KNNQQO9MrPrOWzKoMLqC8na4iZjI7ZnJBZnWtzN4X7fQgrWkdw
+VK_GROUP_ID = 203491631
 
 if not VK_TOKEN:
     raise RuntimeError("Не найден VK_TOKEN")
