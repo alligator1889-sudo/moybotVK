@@ -4,15 +4,14 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from vk_api.exceptions import ApiError
 
-# Берём токен и id группы из Secrets
 VK_TOKEN = os.getenv("VK_TOKEN")
 VK_GROUP_ID = os.getenv("VK_GROUP_ID")
 
 if not VK_TOKEN:
-    raise RuntimeError("Не найден VK_TOKEN в переменных окружения")
+    raise RuntimeError("Не найден VK_TOKEN")
 
 if not VK_GROUP_ID:
-    raise RuntimeError("Не найден VK_GROUP_ID в переменных окружения")
+    raise RuntimeError("Не найден VK_GROUP_ID")
 
 try:
     VK_GROUP_ID = int(VK_GROUP_ID)
@@ -25,10 +24,6 @@ longpoll = VkBotLongPoll(vk_session, VK_GROUP_ID)
 
 
 def is_clip(video_attachment: dict) -> bool:
-    """
-    Проверяем, является ли video-вложение клипом.
-    Делаем это через video.get и анализируем player/title.
-    """
     owner_id = video_attachment.get("owner_id")
     video_id = video_attachment.get("id")
     access_key = video_attachment.get("access_key")
@@ -50,11 +45,9 @@ def is_clip(video_attachment: dict) -> bool:
         player = (video.get("player") or "").lower()
         title = (video.get("title") or "").lower()
 
-        # Основная эвристика: у клипов ссылка плеера обычно содержит /clip
         if "/clip" in player or "vk.com/clip" in player or "vkvideo.ru/clip" in player:
             return True
 
-        # Запасной вариант по названию
         if title.startswith("клип") or title.startswith("clip"):
             return True
 
@@ -69,9 +62,6 @@ def is_clip(video_attachment: dict) -> bool:
 
 
 def delete_message(peer_id: int, conversation_message_id: int):
-    """
-    В беседе надёжнее удалять по peer_id + cmids.
-    """
     try:
         vk.messages.delete(
             peer_id=peer_id,
@@ -113,5 +103,4 @@ for event in longpoll.listen():
     if should_delete:
         delete_message(peer_id, cmid)
 
-    # маленькая пауза, чтобы аккуратнее работать с API
     time.sleep(0.3)
